@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Add new card</h2>
+  <form action="" method="post" novalidate  class="pure-form pure-form-stacked">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.email.label }}
+      {{ form.email(size=32) }}
+    </p>
+    <p>
+      {{ form.card.label }}
+      {{ form.card(size=32) }}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+
+  <h2>Active cards</h2>
+  <table  class="pure-table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Card ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.email }}</td>
+        <td>{{ user.card_id }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
