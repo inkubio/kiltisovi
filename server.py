@@ -11,13 +11,13 @@ app.config.from_object(Config)
 
 
 class RegisterForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()])
-    card = StringField('Card ID', validators=[DataRequired()])
-    submit = SubmitField('Register')
+    email = StringField("Email", validators=[DataRequired()])
+    card = StringField("Card ID", validators=[DataRequired()])
+    submit = SubmitField("Register")
 
 
 def get_db():
-    db = getattr(g, '_database', None)
+    db = getattr(g, "_database", None)
     if db is None:
         db = g._database = sqlite3.connect(Config.DATABASE)
     db.row_factory = sqlite3.Row
@@ -34,7 +34,7 @@ def query_db(query, args=(), one=False):
 
 @app.teardown_appcontext
 def close_connection(exception):
-    db = getattr(g, '_database', None)
+    db = getattr(g, "_database", None)
     if db is not None:
         db.close()
 
@@ -49,7 +49,7 @@ def index():
     form = RegisterForm()
     if form.validate_on_submit():
         query_db(Config.ADD_USER, (form.email.data, form.card.data))
-        flash('Added new card {} for email {}'.format(
+        flash("Added new card {} for email {}".format(
             form.card.data, form.email.data))
     
     users = query_db(Config.GET_USERS)
@@ -65,6 +65,8 @@ def check():
     if db_ret[0]:
         return make_response("nice", 200)
     else:
+        render_template("index.html")
+        flash("Last read ID: {}".format(card_id))
         return make_response("fug", 403)
 
 
