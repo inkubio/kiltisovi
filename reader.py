@@ -60,6 +60,10 @@ def pretty(value):
     print("{} {} {} {}".format(value[:6], value[6:10], value[10:14], value[14:]))
 
 
+def timestamp():
+    return time.strftime("%Y-%m-%dT%H:%M")
+
+
 print("Reading...")
 while True:
     try:
@@ -77,3 +81,4 @@ while True:
 
     except Exception as e:
         print(e)
+        requests.post(API_URL + "/error", data={"error": "{}: {}".format(timestamp(), str(e))})
