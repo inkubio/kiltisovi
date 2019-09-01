@@ -105,3 +105,4 @@ venv.bak/
 
 config.py
 ovi.db
+lastid.txt

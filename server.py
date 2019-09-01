@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, g, request, make_response
 import sqlite3
 import os
+import json
 from config import Config
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
@@ -9,14 +10,22 @@ from wtforms.validators import DataRequired
 app = Flask(__name__)
 app.config.from_object(Config)
 
-global LAST_ID
-LAST_ID = ""
+LAST_ID = "lastid.txt"
 
 
 class RegisterForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     card = StringField("Card ID", validators=[DataRequired()])
     submit = SubmitField("Register")
+
+
+def load_file(filename):
+    with open(filename) as f:
+        return json.load(f)
+
+def dump_file(filename, data):
+    with open(filename, "w") as f:
+        json.dump(data, f)
 
 
 def get_db():
@@ -56,7 +65,8 @@ def index():
             form.card.data, form.email.data))
     
     users = query_db(Config.GET_USERS)
-    return render_template("index.html", form=form, users=users, last_id=LAST_ID)
+    last = load_file(LAST_ID) or {"id": ""}
+    return render_template("index.html", form=form, users=users, last_id=last["id"])
 
 
 @app.route("/check", methods=["POST"])
@@ -68,7 +78,7 @@ def check():
     if db_ret[0]:
         return make_response("nice", 200)
     else:
-        LAST_ID = card_id
+        dump_file(LAST_ID, req)
         return make_response("fug", 403)
 
 
