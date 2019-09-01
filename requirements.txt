@@ -1,3 +1,5 @@
 nfcpy
 requests
 RPi.GPIO
+flask
+flask-wtf
