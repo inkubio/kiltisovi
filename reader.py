@@ -6,6 +6,8 @@ import nfc
 import RPi.GPIO as gpio
 import requests
 
+from config import Config
+
 
 clf = nfc.ContactlessFrontend('ttyUSB0')
 gpio.setmode(gpio.BCM)
@@ -14,7 +16,7 @@ gpio.setup(20, gpio.OUT)
 atexit.register(gpio.cleanup)
 atexit.register(clf.close)
 
-API_URL = "https://inkubaattori.aalto.fi/ovi"
+API_URL = Config.API_URL
 
 # Following codes are magic and specific to HSL travel cards
 SELECT_APPLICATION = "90 5a 0000 03 1420ef 00"
