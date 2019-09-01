@@ -9,6 +9,9 @@ from wtforms.validators import DataRequired
 app = Flask(__name__)
 app.config.from_object(Config)
 
+global LAST_ID
+LAST_ID = ""
+
 
 class RegisterForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
@@ -53,7 +56,7 @@ def index():
             form.card.data, form.email.data))
     
     users = query_db(Config.GET_USERS)
-    return render_template("index.html", form=form, users=users)
+    return render_template("index.html", form=form, users=users, last_id=LAST_ID)
 
 
 @app.route("/check", methods=["POST"])
@@ -65,8 +68,7 @@ def check():
     if db_ret[0]:
         return make_response("nice", 200)
     else:
-        render_template("index.html")
-        flash("Last read ID: {}".format(card_id))
+        LAST_ID = card_id
         return make_response("fug", 403)
 
 
