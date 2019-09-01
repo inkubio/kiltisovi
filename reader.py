@@ -75,7 +75,11 @@ while True:
         else:
             print(tag_id)
 
-        ret = requests.post(API_URL + "/check", json={"id": tag_id})
+        ret = requests.post(
+            API_URL + "/check",
+            json={"id": tag_id},
+            auth=Config.AUTH
+        )
         if ret.status_code == 200:
             open()
         else:
@@ -83,4 +87,8 @@ while True:
 
     except Exception as e:
         print(e)
-        requests.post(API_URL + "/error", data={"error": "{}: {}".format(timestamp(), str(e))})
+        requests.post(
+            API_URL + "/error",
+            json={"error": "{}: {}".format(timestamp(), str(e))},
+            auth=Config.AUTH
+        )
