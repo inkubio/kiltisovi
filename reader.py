@@ -75,7 +75,7 @@ while True:
         else:
             print(tag_id)
 
-        ret = requests.post(API_URL + "/check", data={"id": tag_id})
+        ret = requests.post(API_URL + "/check", json={"id": tag_id})
         if ret.status_code == 200:
             open()
         else:
